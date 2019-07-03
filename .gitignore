@@ -102,3 +102,9 @@ project/plugins/project/
 .scala_dependencies
 .worksheet
 .idea
+
+
+*.json
+*/.exercism/*
+README.md
+build.sbt

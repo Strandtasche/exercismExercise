@@ -108,3 +108,7 @@ project/plugins/project/
 */.exercism/*
 README.md
 build.sbt
+project
+target
+test
+.keep

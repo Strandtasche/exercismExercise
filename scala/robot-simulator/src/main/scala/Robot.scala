@@ -1,34 +1,46 @@
-import Bearing._
+//import Bearing.North
+import Bearing.{East, North, South, West}
 
-
-case class Robot(var bearing: Bearing = Bearing.North, var coordinates: (Int, Int) = (0,0)) {
+case class Robot(bearing: Bearing, coordinates: (Int, Int) = (0,0)) {
 
   def advance(): Robot = {
-    this.bearing match {
-      case North => Robot(this.bearing, (coordinates._1, coordinates._2 + 1))
-      case East => Robot(this.bearing, (coordinates._1 + 1, coordinates._2))
-      case South => Robot(this.bearing, (coordinates._1, coordinates._2 - 1))
-      case West => Robot(this.bearing, (coordinates._1 - 1, coordinates._2))
+    bearing match {
+      case North => copy(coordinates = (coordinates._1, coordinates._2 + 1))
+      case East => copy(coordinates = (coordinates._1 + 1, coordinates._2))
+      case South => copy(coordinates = (coordinates._1, coordinates._2 - 1))
+      case West => copy(coordinates =  (coordinates._1 - 1, coordinates._2))
     }
   }
 
   def turnRight(): Robot = {
-    Robot(Bearing((bearing.id + 1) % 4), this.coordinates)
+    this.bearing match {
+      case North => copy(bearing = East)
+      case East => copy(bearing = South)
+      case South => copy(bearing = West)
+      case West => copy(bearing = North)
+    }
   }
 
   def turnLeft() = {
-    Robot(Bearing((bearing.id + 3) % 4), this.coordinates)
+    this.bearing match {
+      case North => copy(bearing = West)
+      case East => copy(bearing = North)
+      case South => copy(bearing = East)
+      case West => copy(bearing = South)
+    }
   }
 
   def simulate(inp: String): Robot = {
+    var walker: Robot = this
     for (i <- inp){
       i match {
-        case 'R' => this.bearing = turnRight().bearing
-        case 'L' => this.bearing = turnLeft().bearing
-        case 'A' => this.coordinates = advance().coordinates
+        case 'R' => walker = walker.turnRight()
+        case 'L' => walker = walker.turnLeft()
+        case 'A' => walker = walker.advance()
       }
     }
-    this
+    walker
   }
 }
+
 
